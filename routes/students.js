@@ -1,11 +1,25 @@
 var express = require('express');
 var router = express.Router();
 
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+    host:'localhost',
+    user:'root',
+    password:'',
+    database:'school'
+});
 
 
 router.route('/students')
     .get(function (req, res) {
-        res.send('Retrieve all students');
+        console.log('Retrieve all students');
+        connection.connect();
+        connection.query('SELECT * FROM students',function (err,rows,fields) {
+           if(err) throw err;
+           res.json(rows);
+        })
+        connection.end();
+        
     })
     .post(function (req, res) {
         res.send('Add a student');
